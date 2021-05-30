@@ -126,42 +126,6 @@ public class MailSender {
 			   
 		   }  
 	}
-	
-   public static void main(String [] args) {
-   
-	   Properties prop = new Properties();
-	   prop.put("mail.smtp.auth", "true");
-	   prop.put("mail.smtp.starttls.enable", "true");
-	   prop.put("mail.smtps.host", "smtp.buzondecorreo.com");
-	   prop.put("mail.smtp.port", "465");
-	   
-	   String account = "admin@kiwinet.es";
-	   String password = "Richard123";
-	   
-	   /*Session session =  Session.getInstance(prop, new Authenticator() {
-		   protected PasswordAuthentication getPasswordAuthentication() {
-			   return  new PasswordAuthentication(account, password);
-		   }
-	   });*/
-	   
-	   Session session = Session.getDefaultInstance(prop);
-	   
-	   try {
-		   Message msg = new MimeMessage(session);
-		   msg.setFrom(new InternetAddress(account));
-		   msg.setRecipient(Message.RecipientType.TO, new InternetAddress("admin@kiwinet.es"));
-		   msg.setSubject("PruebaMail");
-		   msg.setText("Esto es una prueba");
-		   Transport tr = session.getTransport("smtps");
-		   tr.connect("smtp.buzondecorreo.com", account, password);
-	       tr.sendMessage(msg, new InternetAddress[] {new InternetAddress("admin@kiwinet.es")});
-	       tr.close();
-		   System.out.println("Mail send");
-	   } catch (MessagingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	   }  
-   }
 
 }
 
