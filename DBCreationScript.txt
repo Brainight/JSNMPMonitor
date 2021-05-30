@@ -1,0 +1,61 @@
+CREATE DATABASE JSNMPMonitor;
+USE JSNMPMonitor;
+
+CREATE TABLE snmpagent(
+	agent_id int PRIMARY KEY NOT NULL,
+	machine_name varchar(50),
+	alias varchar(50),
+	ipv4 varchar(15),
+	ipv6 varchar(39),
+	port int,
+	read_com varchar(30),
+	write_com varchar(30)
+);
+
+CREATE TABLE pdu(
+	pdu_id int,
+	type int,
+	pdu_date datetime,
+	agent_id int,
+	PRIMARY KEY (pdu_id, pdu_date),
+	CONSTRAINT fk_agentID_PDU FOREIGN KEY (agent_id) REFERENCES snmpagent(agent_id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
+
+CREATE TABLE varbinding(
+	oid varchar(30) NOT NULL,
+	value varchar(200),
+	pdu_id int,
+	pdu_date datetime,
+	CONSTRAINT fk_pdu_var FOREIGN KEY (pdu_id, pdu_date) REFERENCES pdu(pdu_id, pdu_date) MATCH FULL
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE snmpprocess(
+	processID varchar(30) PRIMARY KEY NOT NULL,
+	processName varchar(30),
+	processDescription varchar(30),
+	processSleepTime int,
+	processSaveData bit,
+	processAgentID int,
+	processOID varchar(400),
+	CONSTRAINT fk_process_agentID FOREIGN KEY (processAgentID) REFERENCES snmpagent(agent_id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+	
+);
+
+CREATE TABLE traprule(
+	id int AUTO_INCREMENT,
+	ruleName varchar(30),
+	trapOID varchar(30),
+	actions varchar(10),
+	mailSubject varchar(40),
+	mailText varchar(100),
+	PRIMARY KEY (id)
+);
+
+
+
